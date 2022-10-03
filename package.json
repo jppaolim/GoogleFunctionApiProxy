@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx @google-cloud/functions-framework --target=proxy",
+    "start": "npx @google-cloud/functions-framework  --target=proxy",
     "deploy": "gcloud functions deploy proxy --runtime nodejs16 --allow-unauthenticated --trigger-http --memory=256 --timeout=60s --env-vars-file ./env.yaml && node success-msg.js"
   },
   "repository": {
@@ -16,8 +16,11 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "http-proxy-middleware": "^2.0.6",
+    "query-string": "^7.1.1",
     "yamlenv": "^1.0.0"
   }
 }

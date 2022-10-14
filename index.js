@@ -35,7 +35,7 @@ const options = {
   target: CONFIG.upstream,  
   changeOrigin: true, // needed for virtual hosted sites
   
-  // very import for POST request 
+  // very important for POST request 
   onProxyReq: fixRequestBody,
   logger: console,
   logLevel: "debug"
@@ -47,13 +47,13 @@ const aProxy = createProxyMiddleware(options);
 // create the server
 const app = express();
 
-//do the login 
+//create a log entry
 morgan.token('req-headers', function(req,res){
   return JSON.stringify(req.headers)
  })
 app.use(morgan(':method :url :status :req-headers '));
 
-// mount `aProxy` in web server
+// mount the proxy in web server
 app.use('/', aProxy);
 
 module.exports = {

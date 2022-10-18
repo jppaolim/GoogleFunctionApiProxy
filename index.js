@@ -1,23 +1,8 @@
-// @ts-check
+//@ts-check
 
-// Simple proxy ... works locally but not on google function due to Huggingface API 
-// what I tried :
-//ws: true, // proxy websocket 
-//followRedirects: true,
-//secure: true,
-//preserveHeaderKeyCase: true,
-//autoRewrite:true,
-//protocolRewrite: true,
-// Allow CORS from any origin
-//app.use(cors());
-//app.set('trust proxy', true);
-//toProxy: true,
+// Simple proxy  : works locally, when tested on google shell, but not when called from outside, may be because of redirections 
 
-//set to true, it won't work locally and I suspect this breaks down on google  
-//xfwd: true, 
-
-
-//load the config env with API Key 
+//load the environment with the correct API Key, stored in env.yaml locally  
 require('yamlenv').config();
 
 const CONFIG = {
@@ -28,6 +13,7 @@ const CONFIG = {
 //now start creating the proxy 
 const express = require('express');
 const morgan = require("morgan");
+
 const { createProxyMiddleware, fixRequestBody } = require('http-proxy-middleware');
 
 //options for the proxy 
@@ -35,19 +21,17 @@ const options = {
   target: CONFIG.upstream,  
   changeOrigin: true, // needed for virtual hosted sites
   
-  // very important for POST request 
+  // very important for POST request on google cloud  
   onProxyReq: fixRequestBody,
-  logger: console,
-  logLevel: "debug"
+  //logger: console,
+  //logLevel: "debug"
 };
 
-// create the proxy (without context)
+// create the proxy, the server 
 const aProxy = createProxyMiddleware(options);
-
-// create the server
 const app = express();
 
-//create a log entry
+//create a logger entry
 morgan.token('req-headers', function(req,res){
   return JSON.stringify(req.headers)
  })
